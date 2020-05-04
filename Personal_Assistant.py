@@ -102,7 +102,7 @@ def wishme():
     else:
         speak("Good Evening Sir")
 
-    speak("I am Laaajjo! Your personal assistant")
+    speak("I am nusaa! Your personal assistant")
     speak("How may i help you sir?")
 #Uses ipinfo.io API and website to get your location and provide it to the weather Api function
 def ipinfoio_api_use():
