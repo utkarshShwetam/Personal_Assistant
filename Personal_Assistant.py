@@ -20,10 +20,10 @@ import config as con
 
 
 #Microsoft Speech Api sapi5 used
-engine=pyttsx3.init()
+engine=pyttsx3.init("sapi5")
 voices=engine.getProperty('voices')
 #print(voices[-1].id)
-engine.setProperty('voice',voices[-1].id)
+engine.setProperty('voice',voices[0].id)
 #print("Hello world")
 
 def open_sir_command():
@@ -85,7 +85,7 @@ def weather_api_use():
     #print(type(wind))
     for key in temperature.keys():
         list.append(temperature[key])
-    speak(f'The current temparature at your location is {list[0]} deggree celsius with a minimum of {list[2]} deggree celsius')
+    speak(f'The current temparature at your location is {list[0]} deggree celsius' ) #with a minimum of {list[2]} deggree celsius')
     for key in wind.keys():
         list.append(wind[key])
     speak(f'Speed of winnnddd is{list[4]}  at a degggree of {list[5]}')
@@ -102,7 +102,7 @@ def wishme():
     else:
         speak("Good Evening Sir")
 
-    speak("I am nusaa! Your personal assistant")
+    speak("I am Jarvis! Your personal assistant")
     speak("How may i help you sir?")
 #Uses ipinfo.io API and website to get your location and provide it to the weather Api function
 def ipinfoio_api_use():
@@ -119,7 +119,7 @@ def ipinfoio_api_use():
 def takeCommand():
     rnize=recog.Recognizer()
     with recog.Microphone() as source:
-        speak("I am listening")
+        print("I am listening")
         rnize.pause_threshold=1
         audio=rnize.listen(source)
     
@@ -147,9 +147,8 @@ def news_get():
       #print(news.link.text)
       #print(news.pubDate.text)
       #print("-"*60)
-#To stop using button
-def stop_ai():
-    exit()
+
+#Main method
 def main():
     speak("Hello")
     wishme()
@@ -208,14 +207,13 @@ def main():
         weather_api_use()
     elif 'the temperature' in querysaid:
         temparature_call()
-    elif 'my location' in querysaid:
+    elif 'my current location' in querysaid:
         ipinfoio_api_use()
     elif 'google search' in querysaid:
         speak("Tell me What do you want to search sir")
         search_query=takeCommand().lower()
         url_search=con.URL_SEARCH
         new=2
-        open_sir_command()
         webbrowser.get(webloc).open(url_search+search_query,new=new)
         speak("Searching for you sir")
     elif 'latest news' in querysaid:
