@@ -16,6 +16,9 @@ import bs4
 import tkinter as t
 from bs4 import BeautifulSoup as soup
 from urllib.request import urlopen
+
+
+#Configuration file for api and voice recognition
 import config as con
 
 
@@ -25,6 +28,9 @@ voices=engine.getProperty('voices')
 #print(voices[-1].id)
 engine.setProperty('voice',voices[0].id)
 #print("Hello world")
+
+
+
 
 def open_sir_command():
     speak("Opening for you sir")
@@ -119,7 +125,7 @@ def ipinfoio_api_use():
 def takeCommand():
     rnize=recog.Recognizer()
     with recog.Microphone() as source:
-        print("I am listening")
+        speak("I am listening")
         rnize.pause_threshold=1
         audio=rnize.listen(source)
     
@@ -152,76 +158,80 @@ def news_get():
 def main():
     speak("Hello")
     wishme()
-    querysaid=takeCommand().lower()
-    var=try_find_chrome_path()
-    #your google chrome browser location 
-    webloc=con.WEBLOC
-    #print(var)
-    #Logic for executing commmands
-    if (querysaid=='none'):
-        speak("You didnt said anything sir")
-
-    if 'hey jarvis' in querysaid:
-        speak('Yeah! Thats me sir.')
-        speak('Please tell me how may i help you sir?')
+    while (1):
         querysaid=takeCommand().lower()
+        var=try_find_chrome_path()
+        #your google chrome browser location 
+        webloc=con.WEBLOC
+        #print(var)
+        #Logic for executing commmands
+        if (querysaid=='none'):
+            speak("You didnt said anything sir")
 
-    if 'how are you' in querysaid:
-        speak("I am doing great sir ! how may i help you?")
-        querysaid=takeCommand().lower()
+        if (con.webpage_dict.get(0)) in querysaid:
+            speak('Yeah! Thats me sir.')
+            speak('Please tell me how may i help you sir?')
+            querysaid=takeCommand().lower()
 
-    if 'wikipedia' in querysaid:
-        speak("Searching Wikipedia Sir")
-        querysaid=querysaid.replace("wikipedia","")
-        results=wikipedia.summary(querysaid,sentences=2)
-        speak("As per Wikipedia")
-        print(results)
-        speak(results)
-    elif ('open a website') in querysaid:
-        if(var=='none'):
-            speak("Please install Google chrome sir to open web pages")
-        else:
-            speak("Tell the url of website sir like for example google.com to open google")
-            website=takeCommand().lower()
-            #open_sir_command()
-            #print(website)
-            if(website=='none'): 
-                speak("No website said by you sir")
+        if (con.webpage_dict.get(1)) in querysaid:
+            speak("I am doing great sir ! how may i help you?")
+            querysaid=takeCommand().lower()
+
+        if (con.webpage_dict.get(2)) in querysaid:
+            speak("Searching Wikipedia Sir")
+            querysaid=querysaid.replace("wikipedia","")
+            results=wikipedia.summary(querysaid,sentences=2)
+            speak("As per Wikipedia")
+            print(results)
+            speak(results) 
+            
+        elif (con.webpage_dict.get(3)) in querysaid:
+            if(var!='none'):
+                speak("Tell the url of website sir like for example google.com to open google")
+                website=takeCommand().lower()
+                #open_sir_command()
+                #print(website)
+                if(website=='none'): 
+                    speak("No website said by you sir")
+                else:
+                    open_sir_command()
+                    webbrowser.get(webloc).open(website)   
             else:
+                speak("Please install Google chrome sir to open web pages")
+
+                
+        elif (con.webpage_dict.get(4)) in querysaid:
+            music_dir=con.MUSIC_DIR
+            if(len(music_dir) == 0):
+                speak("Please provide your music directory")
+            else:
+                songs=os.listdir(music_dir)
+                #print(songs)
+                ran_song=random.randint(0,len(songs)-1)
                 open_sir_command()
-                webbrowser.get(webloc).open(website)
-    elif 'play music' in querysaid:
-        music_dir=con.MUSIC_DIR
-        if(len(music_dir) == 0):
-            speak("Please provide your music directory")
+                os.startfile(os.path.join(music_dir,songs[ran_song]))
+        elif (con.webpage_dict.get(5)) in querysaid:
+            str_time=datetime.datetime.now().strftime("%H:%M:%S")
+            speak(f"Sir,The time is {str_time}")
+        elif (con.webpage_dict.get(6)) in querysaid:
+            weather_api_use()
+        elif (con.webpage_dict.get(7)) in querysaid:
+            temparature_call()
+        elif (con.webpage_dict.get(8)) in querysaid:
+            ipinfoio_api_use()
+        elif (con.webpage_dict.get(9)) in querysaid:
+            speak("Tell me What do you want to search sir")
+            search_query=takeCommand().lower()
+            url_search=con.URL_SEARCH
+            new=2
+            webbrowser.get(webloc).open(url_search+search_query,new=new)
+            speak("Searching for you sir")
+        elif (con.webpage_dict.get(10)) in querysaid:
+            news_get()
+        elif (con.webpage_dict.get(11)) in querysaid:
+            exit()
         else:
-            songs=os.listdir(music_dir)
-            #print(songs)
-            ran_song=random.randint(0,len(songs)-1)
-            open_sir_command()
-            os.startfile(os.path.join(music_dir,songs[ran_song]))
-    elif 'the time' in querysaid:
-        str_time=datetime.datetime.now().strftime("%H:%M:%S")
-        speak(f"Sir,The time is {str_time}")
-    elif 'the weather' in querysaid:
-        weather_api_use()
-    elif 'the temperature' in querysaid:
-        temparature_call()
-    elif 'my current location' in querysaid:
-        ipinfoio_api_use()
-    elif 'google search' in querysaid:
-        speak("Tell me What do you want to search sir")
-        search_query=takeCommand().lower()
-        url_search=con.URL_SEARCH
-        new=2
-        webbrowser.get(webloc).open(url_search+search_query,new=new)
-        speak("Searching for you sir")
-    elif 'latest news' in querysaid:
-        news_get()
-    elif 'stop' in querysaid:
-        exit()
-    else:
-        speak("I cant perform that for now. Sorry sir!")
+            speak("I cant perform that for now. Sorry sir!")
 
 if __name__ == "__main__":
     main()
