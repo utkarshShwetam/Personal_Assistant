@@ -9,7 +9,7 @@ def GUI():
     window=t.Tk()
     window.title("Assistant")
     window.geometry('500x200')
-    lbl1=t.Label(window,text="Your personal AI to get your work done.")
+    lbl1=t.Label(window,text="Your personal assistant to get your work done.")
     lbl1.grid(column=1, row=0)
     lbl2 = t.Label(window, text="Get your work done by pressing Call Assistant")
     lbl2.grid(column=1, row=1)
